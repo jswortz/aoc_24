@@ -1,7 +1,7 @@
 """Test for day 1!
 """
 
-from d_01.historian import Historian
+from historian import Historian
 
 
 TEST_DATA = """
