@@ -1,31 +1,42 @@
 """Test for day 2!
 """
 
-# from d_01.d_01a import Historian
+from power_plant_historian import PowerPlantHistorian
 
 
 TEST_DATA = """
-3   4
-4   3
-2   5
-1   3
-3   9
-3   3
+7 6 4 2 1
+1 2 7 8 9
+9 7 6 2 1
+1 3 2 4 5
+8 6 4 4 1
+1 3 6 7 9
 """
 
-with open("d_01/challenge01.data", "r") as file:
-    challenge01_data = file.read()
+
+TEST_DATA_2 = """
+60 62 63 65 63 66 69 71
+52 51 52 49 47 45
+17 15 13 12 15 10
+"""
+
+with open("d_02/challenge02.data", "r") as file:
+    challenge02_data = file.read()
 
 
 def main(data: str):
-    historian = Historian(text_list=data)
-    print("Fist parsed list: ", historian.parsed_list1)
-    print("Second parsed list: ", historian.parsed_list2)
-    print("Distances sorted by minimum first: ", historian.pairwise_distances)
-    print("Total Distance Between Lists: ", historian.total_distance)
-    print("Similarity Score From Left to Right List: ", historian.similarity_score)
+    historian = PowerPlantHistorian(plant_list=data)
+    print("Parsed plant list: ", historian.parsed_list)
+    print("Is list safe: ", historian.is_list_safe)
+    print("The count of safe reports: ", historian.count_of_safe)
+    print(
+        "The dampener made it so these reports were safe: ",
+        historian.count_of_safe_dampened,
+    )
+
+    # print("Is Dampened List Safe: ", historian.is_dampened_list_safe)
 
 
 if __name__ == "__main__":
     main(data=TEST_DATA)
-    main(data=challenge01_data)
+    main(data=challenge02_data)
