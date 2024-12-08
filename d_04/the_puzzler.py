@@ -25,18 +25,8 @@ class Puzzler:
         self.lines_with_sublist = [
             list(line) for line in self.input_data.split()
         ]  # breaks characters to list for indexing
-        filtered_lines = []
-        for line in self.lines_with_sublist:
-            filtered_line = [
-                char if char in list(self.sequence_to_find) else "." for char in line
-            ]
-            filtered_lines.append(filtered_line)
-        self.solutions = self.convolve_left_to_right(
-            input_lines=filtered_lines, sequence_to_find=self.sequence_to_find
-        )
-        self.set_of_xmas_points = self.check_for_xmas(self.solutions)
 
-    def convolve_left_to_right(
+    async def convolve_left_to_right(
         self,
         input_lines: List[List[str]],
         sequence_to_find: str,
@@ -66,7 +56,7 @@ class Puzzler:
                     )
                     if circled_word == sequence_to_find:
                         matched_sequences.append((position, direction))
-        return matched_sequences
+        yield matched_sequences
 
     def get_sequence_by_direction(
         self,
@@ -122,10 +112,11 @@ class Puzzler:
 
         return circled_word
 
-    def check_for_xmas(
+    async def check_for_xmas(
         self, solutions: List[Tuple[Tuple[int, int], Direction]]
     ) -> List[Tuple[int, int]]:
-        crosses = []
+        # crosses = []
+        solutions = solutions
         for coords, direction in solutions:
             y, x = coords  # reversed if we think x = horizontal and y = vertical
             if direction is Direction.SOUTHWEST:
@@ -134,48 +125,48 @@ class Puzzler:
                         y + 2,
                         x,
                     ):
-                        crosses.append((y + 1, x - 1))
+                        yield (y + 1, x - 1)
                     if x_solution_dir is Direction.SOUTHEAST and x_solution_coords == (
                         y,
                         x - 2,
                     ):
-                        crosses.append((y + 1, x - 1))
+                        yield (y + 1, x - 1)
             if direction is Direction.SOUTHEAST:
                 for x_solution_coords, x_solution_dir in solutions:
                     if x_solution_dir is Direction.NORTHEAST and x_solution_coords == (
                         y + 2,
                         x,
                     ):
-                        crosses.append((y + 1, x + 1))
+                        yield (y + 1, x + 1)
                     if x_solution_dir is Direction.SOUTHWEST and x_solution_coords == (
                         y,
                         x + 2,
                     ):
-                        crosses.append((y + 1, x + 1))
+                        yield (y + 1, x + 1)
             if direction is Direction.NORTHWEST:
                 for x_solution_coords, x_solution_dir in solutions:
                     if x_solution_dir is Direction.NORTHEAST and x_solution_coords == (
                         y,
                         x - 2,
                     ):
-                        crosses.append((y - 1, x - 1))
+                        yield (y - 1, x - 1)
                     if x_solution_dir is Direction.SOUTHWEST and x_solution_coords == (
                         y - 2,
                         x,
                     ):
-                        crosses.append((y - 1, x - 1))
+                        yield (y - 1, x - 1)
             if direction is Direction.NORTHEAST:
                 for x_solution_coords, x_solution_dir in solutions:
                     if x_solution_dir is Direction.NORTHWEST and x_solution_coords == (
                         y,
                         x + 2,
                     ):
-                        crosses.append((y - 1, x + 1))
+                        yield (y - 1, x + 1)
                     if x_solution_dir is Direction.SOUTHEAST and x_solution_coords == (
                         y - 2,
                         x,
                     ):
-                        crosses.append((y - 1, x + 1))
+                        yield (y - 1, x + 1)
 
-        set_of_solutions = set([xmas for xmas in crosses])
-        return list(set_of_solutions)
+        # set_of_solutions = set([xmas for xmas in crosses])
+        # return list(set_of_solutions)
